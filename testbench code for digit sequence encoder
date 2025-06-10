@@ -1,0 +1,39 @@
+`timescale 1ns / 1ps
+module top_module_tb;
+// Inputs
+reg clk;
+wire q0, q1, q2, q3, q4;
+
+// Instantiate the Unit Under Test (UUT)
+top_module uut (
+    .clk(clk),
+    .q0(q0),
+    .q1(q1),
+    .q2(q2),
+    .q3(q3),
+    .q4(q4)
+);
+
+// Clock generation
+always #5 clk = ~clk;  // 10ns period (100MHz)
+
+// Initialize variables and run simulation
+initial begin
+    clk = 0;
+    // Wait for initialization
+    #10;
+    #500;
+    $finish;
+end
+
+// Monitor the outputs
+initial begin
+    $monitor("Time=%0t | clk=%b | State: q0=%b q1=%b q2=%b q3=%b q4=%b | Binary=%b%b%b%b%b", 
+              $time, clk, q0, q1, q2, q3, q4, q0, q1, q2, q3, q4);
+end
+
+initial begin
+    $dumpfile("top_module_tb.vcd");
+    $dumpvars(0, top_module_tb);
+end
+endmodule
